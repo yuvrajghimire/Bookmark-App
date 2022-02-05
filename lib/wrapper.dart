@@ -1,8 +1,10 @@
-import 'package:bookmark/components/variables_constants.dart';
+import 'package:bookmark/providers/url_provider.dart';
 import 'package:bookmark/screens/favorite.dart';
 import 'package:bookmark/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/linearicons_free_icons.dart';
+import 'package:fluttericon/typicons_icons.dart';
+import 'package:provider/provider.dart';
 
 class Wrapper extends StatefulWidget {
   const Wrapper({Key? key}) : super(key: key);
@@ -15,10 +17,6 @@ class _WrapperState extends State<Wrapper> {
   int _currentIndex = 0;
 
   List pages = [const Home(), const Favorite()];
-
-  TextEditingController urlController = TextEditingController();
-
-  String _selectedValue = '';
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +39,8 @@ class _WrapperState extends State<Wrapper> {
                   boxShadow: [
                     BoxShadow(
                       color: Theme.of(context).primaryColor.withOpacity(0.3),
-                      spreadRadius: 5,
-                      blurRadius: 7,
+                      spreadRadius: 3,
+                      blurRadius: 47,
                       offset: const Offset(0, 2),
                     ),
                   ],
@@ -55,7 +53,7 @@ class _WrapperState extends State<Wrapper> {
                             size: 25, color: Theme.of(context).primaryColor),
                         0),
                     bottomNavigationBarItem(
-                        Icon(LineariconsFree.star_1,
+                        Icon(Typicons.star,
                             size: 25, color: Theme.of(context).primaryColor),
                         1),
                   ],
@@ -68,7 +66,9 @@ class _WrapperState extends State<Wrapper> {
               child: FloatingActionButton(
                 backgroundColor: Theme.of(context).primaryColor,
                 onPressed: () {
-                  _show();
+                  Navigator.pushNamed(context, 'edit');
+                  Provider.of<UrlProvider>(context, listen: false)
+                      .changeFavoriteStatus(false);
                 },
                 child: const Icon(Icons.add),
               ),
@@ -91,128 +91,5 @@ class _WrapperState extends State<Wrapper> {
           },
           icon: icon),
     );
-  }
-
-  void _show() {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        elevation: 5,
-        backgroundColor: Colors.transparent,
-        context: context,
-        builder: (context) => Container(
-              decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20))),
-              child: Padding(
-                padding: EdgeInsets.only(
-                    top: 15,
-                    left: 15,
-                    right: 15,
-                    bottom: MediaQuery.of(context).viewInsets.bottom + 15),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Theme.of(context)
-                                  .primaryColor
-                                  .withOpacity(0.2), //color of shadow
-                              spreadRadius: 5, //spread radius
-                              blurRadius: 7, // blur radius
-                              offset: const Offset(0, 0),
-                            )
-                          ],
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: BorderRadius.circular(20)),
-                      width: double.infinity,
-                      child: TextField(
-                        cursorColor: Theme.of(context).primaryColor,
-                        cursorHeight: 20,
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 18),
-                        controller: urlController,
-                        decoration: InputDecoration(
-                            hintStyle: const TextStyle(
-                                fontFamily: 'Nunito', fontSize: 16),
-                            hintText: 'Enter an URL',
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            fillColor:
-                                Theme.of(context).scaffoldBackgroundColor,
-                            filled: true),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    DropdownButtonHideUnderline(
-                      child: ButtonTheme(
-                        alignedDropdown: true,
-                        child: DropdownButton(
-                          iconEnabledColor: Colors.white,
-                          dropdownColor:
-                              Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: BorderRadius.circular(20),
-                          isDense: true,
-                          icon: const SizedBox(),
-                          hint: Row(
-                            children: [
-                              Icon(
-                                Icons.sort_outlined,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              const SizedBox(width: 20),
-                              Text(_selectedValue,
-                                  style: TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      color: Theme.of(context).primaryColor))
-                            ],
-                          ),
-                          style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              color: Theme.of(context).primaryColor),
-                          items: sortItems.map((String items) {
-                            return DropdownMenuItem(
-                              value: items,
-                              child: SizedBox(
-                                width: 130,
-                                child: Text(items,
-                                    style: const TextStyle(
-                                        fontFamily: 'Nunito', fontSize: 16)),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (String? value) {
-                            setState(() {
-                              _selectedValue = value!;
-                              print(_selectedValue);
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Center(
-                      child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                  Theme.of(context).primaryColor)),
-                          onPressed: () {},
-                          child: const Text('Submit',
-                              style: TextStyle(fontFamily: 'Nunito'))),
-                    )
-                  ],
-                ),
-              ),
-            ));
   }
 }

@@ -121,9 +121,7 @@ class _FavoriteState extends State<Favorite> {
                     Expanded(
                       child: IconButton(
                         tooltip: 'Favorite',
-                        onPressed: () {
-                          print('fav');
-                        },
+                        onPressed: () {},
                         icon: Icon(LineariconsFree.star_1,
                             size: 19, color: Theme.of(context).primaryColor),
                       ),
@@ -131,9 +129,7 @@ class _FavoriteState extends State<Favorite> {
                     Expanded(
                       child: IconButton(
                         tooltip: 'Copy to clipboard',
-                        onPressed: () {
-                          print('copy');
-                        },
+                        onPressed: () {},
                         icon: Icon(Icons.copy_outlined,
                             size: 19, color: Theme.of(context).primaryColor),
                       ),
