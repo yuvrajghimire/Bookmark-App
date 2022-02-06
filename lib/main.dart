@@ -1,5 +1,7 @@
 import 'package:bookmark/providers/url_provider.dart';
-import 'package:bookmark/screens/edit.dart';
+import 'package:bookmark/screens/add_bookmark.dart';
+import 'package:bookmark/screens/edit_bookmark.dart';
+import 'package:bookmark/screens/category.dart';
 import 'package:bookmark/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,11 +22,13 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
           scaffoldBackgroundColor: const Color(0xffeff1f7),
-          primaryColor: const Color(0xff6c60e1)),
+          primaryColor: const Color(0xff6759e0)),
       initialRoute: '/',
       routes: {
         '/': (context) => const Wrapper(),
-        'edit': (context) => const Edit(),
+        'add': (context) => const AddBookmark(),
+        'edit': (context) => const EditBookmark(),
+        'category': (context) => const Category(),
       },
     );
   }

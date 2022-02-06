@@ -66,7 +66,7 @@ class _WrapperState extends State<Wrapper> {
               child: FloatingActionButton(
                 backgroundColor: Theme.of(context).primaryColor,
                 onPressed: () {
-                  Navigator.pushNamed(context, 'edit');
+                  Navigator.pushNamed(context, 'add');
                   Provider.of<UrlProvider>(context, listen: false)
                       .changeFavoriteStatus(false);
                 },
