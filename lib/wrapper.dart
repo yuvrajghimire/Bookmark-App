@@ -19,6 +19,12 @@ class _WrapperState extends State<Wrapper> {
   List pages = [const Home(), const Favorite()];
 
   @override
+  void initState() {
+    super.initState();
+    Provider.of<UrlProvider>(context, listen: false).getUrlItems();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -68,7 +74,7 @@ class _WrapperState extends State<Wrapper> {
                 onPressed: () {
                   Navigator.pushNamed(context, 'add');
                   Provider.of<UrlProvider>(context, listen: false)
-                      .changeFavoriteStatus(false);
+                      .changeFavoriteStatusAdd(false);
                 },
                 child: const Icon(Icons.add),
               ),

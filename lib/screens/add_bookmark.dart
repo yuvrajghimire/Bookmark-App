@@ -24,23 +24,6 @@ class _AddBookmarkState extends State<AddBookmark> {
   String _selectedColor = 'e0d7ff';
 
   bool favoriteStatus = false;
-
-  color(color) {
-    if (color == 'fff2c7') {
-      return const Color(0xfffff2c7);
-    } else if (color == 'd8efff') {
-      return const Color(0xffd8efff);
-    } else if (color == 'e0d7ff') {
-      return const Color(0xffe0d7ff);
-    } else if (color == 'fae1f9') {
-      return const Color(0xfffae1f9);
-    } else if (color == 'b9eedc') {
-      return const Color(0xffb9eedc);
-    } else {
-      return const Color(0xfffedfcb);
-    }
-  }
-
   @override
   void dispose() {
     super.dispose();
@@ -313,7 +296,7 @@ class _AddBookmarkState extends State<AddBookmark> {
                                 style: TextStyle(
                                     fontFamily: 'Nunito',
                                     color: Theme.of(context).primaryColor),
-                                items: sortItems.map((String items) {
+                                items: urlData.categories.map((dynamic items) {
                                   return DropdownMenuItem(
                                     value: items,
                                     child: SizedBox(
@@ -329,7 +312,7 @@ class _AddBookmarkState extends State<AddBookmark> {
                                     ),
                                   );
                                 }).toList(),
-                                onChanged: (String? value) {
+                                onChanged: (dynamic? value) {
                                   setState(() {
                                     _selectedValue = value!;
                                     // print(_selectedValue);
@@ -429,7 +412,7 @@ class _AddBookmarkState extends State<AddBookmark> {
                                         Theme.of(context).primaryColor)),
                                 onPressed: () {
                                   Navigator.pop(context);
-                                  urlData.changeFavoriteStatus(false);
+                                  urlData.changeFavoriteStatusAdd(false);
                                 },
                                 child: const Text('Cancel',
                                     style: TextStyle(
@@ -492,9 +475,9 @@ class _AddBookmarkState extends State<AddBookmark> {
                       child: IconButton(
                           onPressed: () {
                             if (urlData.favoriteStatus == true) {
-                              urlData.changeFavoriteStatus(false);
+                              urlData.changeFavoriteStatusAdd(false);
                             } else {
-                              urlData.changeFavoriteStatus(true);
+                              urlData.changeFavoriteStatusAdd(true);
                             }
                           },
                           icon: urlData.favoriteStatus == true

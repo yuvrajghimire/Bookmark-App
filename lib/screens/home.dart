@@ -1,3 +1,4 @@
+import 'package:bookmark/components/components.dart';
 import 'package:bookmark/components/variables_constants.dart';
 import 'package:bookmark/providers/url_provider.dart';
 import 'package:flutter/material.dart';
@@ -16,22 +17,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  color(color) {
-    if (color == 'fff2c7') {
-      return const Color(0xfffff2c7);
-    } else if (color == 'd8efff') {
-      return const Color(0xffd8efff);
-    } else if (color == 'e0d7ff') {
-      return const Color(0xffe0d7ff);
-    } else if (color == 'fae1f9') {
-      return const Color(0xfffae1f9);
-    } else if (color == 'b9eedc') {
-      return const Color(0xffb9eedc);
-    } else {
-      return const Color(0xfffedfcb);
-    }
-  }
-
   snackBarCopyClipboard(context) => SnackBar(
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 10,
@@ -60,7 +45,7 @@ class _HomeState extends State<Home> {
               physics: const BouncingScrollPhysics(),
               children: [
                 Container(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,32 +53,56 @@ class _HomeState extends State<Home> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Bookmarks',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 22,
-                              fontFamily: 'Nunito',
+                          Row(
+                            children: [
+                              const Text(
+                                'Bookmarks',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 25,
+                                  fontFamily: 'Nunito',
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Opacity(
+                                opacity: 0.6,
+                                child: Row(
+                                  children: [
+                                    Icon(LineariconsFree.bookmark,
+                                        size: 14,
+                                        color: Theme.of(context).primaryColor),
+                                    const SizedBox(width: 2),
+                                    Text(
+                                      '${urlData.urls.length}',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(height: 1),
+                          Opacity(
+                            opacity: 0.7,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.pushNamed(context, 'category');
+                              },
+                              child: Text(
+                                'Browse Categories',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                  color: Theme.of(context).primaryColor,
+                                  fontFamily: 'Nunito',
+                                ),
+                              ),
                             ),
                           ),
-                          Opacity(
-                            opacity: 0.6,
-                            child: Row(
-                              children: [
-                                Icon(LineariconsFree.bookmark,
-                                    size: 14,
-                                    color: Theme.of(context).primaryColor),
-                                Text(
-                                  '${urlData.urls.length}',
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontFamily: 'Nunito',
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
                         ],
                       ),
                       Row(
@@ -101,9 +110,7 @@ class _HomeState extends State<Home> {
                           RotatedBox(
                             quarterTurns: 1,
                             child: IconButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, 'category');
-                                },
+                                onPressed: () {},
                                 icon: Icon(Icons.compare_arrows,
                                     size: 25,
                                     color: Theme.of(context).primaryColor)),
@@ -113,9 +120,10 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 ),
+                const SizedBox(height: 15),
                 urlData.urls.isEmpty
                     ? Center(
-                        child: Text('Add a new bookmark',
+                        child: Text('Empty list. Add a new bookmark',
                             style: TextStyle(
                                 fontFamily: 'Nunito',
                                 fontSize: 20,
@@ -149,169 +157,198 @@ class _HomeState extends State<Home> {
                                   ),
                                 ],
                               ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 10,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              urlData.urls[index].title! == ''
-                                                  ? '...'
-                                                  : urlData.urls[index].title!
-                                                              .length >
-                                                          50
-                                                      ? urlData.urls[index]
-                                                              .title!
-                                                              .substring(
-                                                                  0, 15) +
-                                                          '...'
-                                                      : urlData
-                                                          .urls[index].title!,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 19,
-                                                overflow: TextOverflow.ellipsis,
-                                                fontFamily: 'Nunito',
-                                              ),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Opacity(
-                                              opacity: 0.7,
-                                              child: Text(
-                                                '✦ ${urlData.urls[index].category!}',
+                              child: InkWell(
+                                onTap: () {
+                                  // print('tapped');
+                                  Navigator.pushNamed(context, 'edit',
+                                      arguments: {'urlIndex': index});
+                                },
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 10,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                urlData.urls[index].title! == ''
+                                                    ? '...'
+                                                    : urlData.urls[index].title!
+                                                                .length >
+                                                            50
+                                                        ? urlData.urls[index]
+                                                                .title!
+                                                                .substring(
+                                                                    0, 15) +
+                                                            '...'
+                                                        : urlData
+                                                            .urls[index].title!,
                                                 style: const TextStyle(
                                                   fontWeight: FontWeight.w700,
-                                                  fontSize: 15,
+                                                  fontSize: 19,
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   fontFamily: 'Nunito',
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 5),
-                                        Opacity(
-                                          opacity: 0.6,
-                                          child: Text(
-                                            urlData.urls[index].url!,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 14,
-                                              fontFamily: 'Nunito',
-                                              overflow: TextOverflow.ellipsis,
+                                              const SizedBox(width: 10),
+                                              Opacity(
+                                                opacity: 0.7,
+                                                child: Text(
+                                                  '✦ ${urlData.urls[index].category!}',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 15,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    fontFamily: 'Nunito',
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 5),
+                                          Opacity(
+                                            opacity: 0.6,
+                                            child: Text(
+                                              urlData.urls[index].url!,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 14,
+                                                fontFamily: 'Nunito',
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: IconButton(
-                                      tooltip: 'Favorite',
-                                      onPressed: () {
-                                        if (urlData.urls[index].favorite ==
-                                            true) {
-                                          urlData.changeFavoriteSatusEdit(
-                                              false, index);
-                                        } else {
-                                          urlData.changeFavoriteSatusEdit(
-                                              true, index);
-                                        }
-                                      },
-                                      icon: Icon(
-                                          urlData.urls[index].favorite! == true
-                                              ? Typicons.star_filled
-                                              : Typicons.star,
-                                          size: 19,
-                                          color:
-                                              Theme.of(context).primaryColor),
+                                    Expanded(
+                                      child: IconButton(
+                                        tooltip: 'Favorite',
+                                        onPressed: () {
+                                          if (urlData.urls[index].favorite ==
+                                              true) {
+                                            urlData.changeFavoriteStatus(
+                                                false, index);
+                                          } else {
+                                            urlData.changeFavoriteStatus(
+                                                true, index);
+                                          }
+                                        },
+                                        icon: Icon(
+                                            urlData.urls[index].favorite! ==
+                                                    true
+                                                ? Typicons.star_filled
+                                                : Typicons.star,
+                                            size: 19,
+                                            color:
+                                                Theme.of(context).primaryColor),
+                                      ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: IconButton(
-                                      tooltip: 'Copy to clipboard',
-                                      onPressed: () {
-                                        Clipboard.setData(ClipboardData(
-                                            text:
-                                                "${urlData.urls[index].url}"));
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                                snackBarCopyClipboard(context));
-                                      },
-                                      icon: Icon(Icons.copy_outlined,
-                                          size: 19,
-                                          color:
-                                              Theme.of(context).primaryColor),
+                                    Expanded(
+                                      child: IconButton(
+                                        tooltip: 'Copy to clipboard',
+                                        onPressed: () {
+                                          Clipboard.setData(ClipboardData(
+                                              text:
+                                                  "${urlData.urls[index].url}"));
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                                  snackBarCopyClipboard(
+                                                      context));
+                                        },
+                                        icon: Icon(Icons.copy_outlined,
+                                            size: 19,
+                                            color:
+                                                Theme.of(context).primaryColor),
+                                      ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: PopupMenuButton(
-                                      // initialValue: 2,
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                      child: Icon(Icons.more_vert,
-                                          size: 19,
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                      itemBuilder: (context) {
-                                        return List.generate(actions.length,
-                                            (popupIndex) {
-                                          return PopupMenuItem(
-                                            onTap: () async {
-                                              if (popupIndex == 0) {
-                                                Navigator.pop(context);
-                                                Navigator.pushNamed(
-                                                    context, 'edit');
-                                              } else if (popupIndex == 1) {
-                                                Clipboard.setData(ClipboardData(
-                                                    text:
-                                                        "${urlData.urls[index].url}"));
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                        snackBarCopyClipboard(
-                                                            context));
-                                              } else if (popupIndex == 2) {
-                                                Share.share(
-                                                    urlData.urls[index].url!);
-                                              } else if (popupIndex == 3) {
-                                                try {
-                                                  await launch(
-                                                      urlData.urls[index].url!);
-                                                } catch (e) {
+                                    Expanded(
+                                      child: PopupMenuButton(
+                                        // initialValue: 2,
+                                        color: Theme.of(context)
+                                            .scaffoldBackgroundColor,
+                                        child: Icon(Icons.more_vert,
+                                            size: 19,
+                                            color:
+                                                Theme.of(context).primaryColor),
+                                        itemBuilder: (popupContext) {
+                                          return List.generate(actions.length,
+                                              (popupIndex) {
+                                            return PopupMenuItem(
+                                              onTap: () async {
+                                                if (popupIndex == 0) {
+                                                  Future.delayed(
+                                                      const Duration(
+                                                          seconds: 0),
+                                                      () => Navigator.pushNamed(
+                                                              context, 'edit',
+                                                              arguments: {
+                                                                'urlIndex':
+                                                                    index
+                                                              }));
+                                                } else if (popupIndex == 1) {
+                                                  Clipboard.setData(ClipboardData(
+                                                      text:
+                                                          "${urlData.urls[index].url}"));
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(
-                                                          snackBarInvalidUrl(
+                                                          snackBarCopyClipboard(
                                                               context));
+                                                } else if (popupIndex == 2) {
+                                                  Share.share(
+                                                      urlData.urls[index].url!);
+                                                } else if (popupIndex == 3) {
+                                                  try {
+                                                    await launch(urlData
+                                                        .urls[index].url!);
+                                                  } catch (e) {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                            snackBarInvalidUrl(
+                                                                context));
+                                                  }
+                                                } else {
+                                                  Future.delayed(
+                                                      const Duration(
+                                                          seconds: 0),
+                                                      () => showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return alertDialog(
+                                                                  context,
+                                                                  index);
+                                                            },
+                                                          ));
                                                 }
-                                              } else {
-                                                urlData.deleteUrl(index);
-                                              }
-                                            },
-                                            value: popupIndex,
-                                            child: Text(actions[popupIndex],
-                                                style: TextStyle(
-                                                    color:
-                                                        actions[popupIndex] ==
-                                                                'Delete'
-                                                            ? Colors.red
-                                                            : Theme.of(context)
-                                                                .primaryColor,
-                                                    fontSize: 16,
-                                                    fontFamily: 'Nunito')),
-                                          );
-                                        });
-                                      },
+                                              },
+                                              value: popupIndex,
+                                              child: Text(actions[popupIndex],
+                                                  style: TextStyle(
+                                                      color: actions[
+                                                                  popupIndex] ==
+                                                              'Delete'
+                                                          ? Colors.red
+                                                          : Theme.of(context)
+                                                              .primaryColor,
+                                                      fontSize: 16,
+                                                      fontFamily: 'Nunito')),
+                                            );
+                                          });
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             );
                           },

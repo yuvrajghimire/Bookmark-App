@@ -1,16 +1,32 @@
+import 'dart:convert';
+import 'package:bookmark/components/variables_constants.dart';
 import 'package:bookmark/models/url_model.dart';
 import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+late SharedPreferences _prefs;
 
 class UrlProvider extends ChangeNotifier {
   // default values
 
   bool _favoriteStatus = false;
+  // ignore: unused_field
+  bool _isLoading = true;
+  final String _selectedValue = '';
+  final String _selectedColor = '';
+  final List<UrlModel> _sharedPrefList = [];
 
   // getters
 
   List<UrlModel> get urls => sortUrls();
-  final List<UrlModel> _urls = [];
+  List<UrlModel> _urls = [];
+  List _categories = [];
+
+  List get categories => getCategories();
+
   bool get favoriteStatus => _favoriteStatus;
+  String get selectedValue => _selectedValue;
+  String get selectedColor => _selectedColor;
 
 // sort the urls according to date
 
@@ -27,6 +43,7 @@ class UrlProvider extends ChangeNotifier {
 
   addUrl(item) {
     _urls.add(item);
+    updatePref();
     notifyListeners();
   }
 
@@ -34,20 +51,91 @@ class UrlProvider extends ChangeNotifier {
 
   deleteUrl(index) {
     _urls.removeAt(index);
+    updatePref();
+    notifyListeners();
+  }
+
+  // edit url
+
+  editUrl(index, title, url, description, category, color, favorite) {
+    _urls[index].title = title;
+    _urls[index].url = url;
+    _urls[index].description = description;
+    _urls[index].category = category;
+    _urls[index].color = color;
+    _urls[index].favorite = favorite;
+    updatePref();
+    notifyListeners();
+  }
+
+  // change category Value
+
+  changeCategory(category, index) {
+    _urls[index].category = category;
+    updatePref();
+    notifyListeners();
+  }
+  // change color Value
+
+  changeColor(color, index) {
+    _urls[index].color = color;
+    updatePref();
+    notifyListeners();
+  }
+  // change status Value
+
+  changeFavoriteStatus(status, index) {
+    _urls[index].favorite = status;
+    updatePref();
     notifyListeners();
   }
 
   // change favorite status in adding bookmark
 
-  changeFavoriteStatus(status) {
+  changeFavoriteStatusAdd(status) {
     _favoriteStatus = status;
     notifyListeners();
   }
 
-  // change favorite status in editing bookmark
+  // update to shared preferences
 
-  changeFavoriteSatusEdit(status, index) {
-    _urls[index].favorite = status;
+  updatePref() async {
+    _prefs = await SharedPreferences.getInstance();
+    var json = jsonEncode(_urls.map((e) => e.toJson()).toList());
+    _prefs.setString('urlList', json);
     notifyListeners();
+  }
+
+  // getting items from shared preferences
+
+  getUrlItems() async {
+    _prefs = await SharedPreferences.getInstance();
+    var jsonList = _prefs.getString('urlList');
+    try {
+      if (jsonList == null) {
+        // print('null printed');
+        _isLoading = true;
+      } else {
+        _isLoading = false;
+        var convert = await json.decode(jsonList);
+        await convert!.forEach((e) {
+          _sharedPrefList.add(UrlModel.fromJson(e));
+        });
+        // print(_sharedPrefList);
+      }
+    } catch (e) {
+      // print(e.toString());
+    }
+    _urls = _sharedPrefList;
+    notifyListeners();
+  }
+
+  // get categories
+  getCategories() {
+    _categories = [];
+    for (var i = 0; i < sortItems.length; i++) {
+      _categories.add(sortItems[i]);
+    }
+    return _categories;
   }
 }
