@@ -1,4 +1,4 @@
-package com.example.bookmark
+package com.yuvghimire.bookmark
 
 import io.flutter.embedding.android.FlutterActivity
 
