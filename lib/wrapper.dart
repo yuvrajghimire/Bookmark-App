@@ -22,6 +22,7 @@ class _WrapperState extends State<Wrapper> {
   void initState() {
     super.initState();
     Provider.of<UrlProvider>(context, listen: false).getUrlItems();
+    Provider.of<UrlProvider>(context, listen: false).getCategoryItems();
   }
 
   @override
@@ -89,13 +90,14 @@ class _WrapperState extends State<Wrapper> {
     return Opacity(
       opacity: _currentIndex == index ? 1 : 0.5,
       child: IconButton(
-          enableFeedback: false,
-          onPressed: () {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          icon: icon),
+        enableFeedback: false,
+        onPressed: () {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        icon: icon,
+      ),
     );
   }
 }

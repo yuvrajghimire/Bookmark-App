@@ -4,7 +4,6 @@ import 'package:bookmark/providers/url_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/linearicons_free_icons.dart';
 import 'package:fluttericon/typicons_icons.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -273,7 +272,7 @@ class _EditBookmarkState extends State<EditBookmark> {
                           ],
                         ),
                         const SizedBox(
-                          height: 25,
+                          height: 15,
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -289,6 +288,22 @@ class _EditBookmarkState extends State<EditBookmark> {
                                         fontSize: 18,
                                         letterSpacing: 0.3,
                                         fontWeight: FontWeight.w700)),
+                                const SizedBox(width: 10),
+                                InkWell(
+                                  onTap: () =>
+                                      Navigator.pushNamed(context, 'category'),
+                                  child: Row(
+                                    children: const [
+                                      Icon(Icons.add, size: 20),
+                                      Text('Add',
+                                          style: TextStyle(
+                                              fontFamily: 'Nunito',
+                                              fontSize: 15,
+                                              letterSpacing: 0.3,
+                                              fontWeight: FontWeight.w500)),
+                                    ],
+                                  ),
+                                )
                               ],
                             ),
                             const SizedBox(height: 10),
@@ -296,6 +311,7 @@ class _EditBookmarkState extends State<EditBookmark> {
                               child: ButtonTheme(
                                 alignedDropdown: true,
                                 child: DropdownButton(
+                                  menuMaxHeight: 400,
                                   iconEnabledColor: Colors.white,
                                   dropdownColor:
                                       Theme.of(context).scaffoldBackgroundColor,
@@ -321,7 +337,8 @@ class _EditBookmarkState extends State<EditBookmark> {
                                   style: TextStyle(
                                       fontFamily: 'Nunito',
                                       color: Theme.of(context).primaryColor),
-                                  items: sortItems.map((String items) {
+                                  items:
+                                      urlData.categories.map((dynamic items) {
                                     return DropdownMenuItem(
                                       value: items,
                                       child: SizedBox(
@@ -341,7 +358,7 @@ class _EditBookmarkState extends State<EditBookmark> {
                                       ),
                                     );
                                   }).toList(),
-                                  onChanged: (String? value) {
+                                  onChanged: (dynamic value) {
                                     urlData.changeCategory(
                                         value, widget.urlIndex);
                                   },
@@ -405,17 +422,19 @@ class _EditBookmarkState extends State<EditBookmark> {
                                                     .color))),
                                       ],
                                     ),
-                                    items: colors.map((String items) {
-                                      return DropdownMenuItem(
-                                        value: items,
-                                        child: Container(
-                                            width: 130,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                                color: color(items))),
-                                      );
-                                    }).toList(),
+                                    items: colors.map(
+                                      (String items) {
+                                        return DropdownMenuItem(
+                                          value: items,
+                                          child: Container(
+                                              width: 130,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                  color: color(items))),
+                                        );
+                                      },
+                                    ).toList(),
                                     onChanged: (String? value) {
                                       urlData.changeColor(
                                           value, widget.urlIndex);
@@ -457,38 +476,32 @@ class _EditBookmarkState extends State<EditBookmark> {
                               width: 120,
                               height: 45,
                               child: ElevatedButton(
-                                  style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Theme.of(context).primaryColor)),
-                                  onPressed: () {
-                                    String _formatDateTime(DateTime dateTime) {
-                                      return DateFormat('MM/dd/yyyy HH:mm:ss')
-                                          .format(dateTime);
-                                    }
-
-                                    final DateTime now = DateTime.now();
-                                    final String formattedDateTime =
-                                        _formatDateTime(now);
-                                    if (_formKey.currentState!.validate() ==
-                                        true) {
-                                      Provider.of<UrlProvider>(context,
-                                              listen: false)
-                                          .editUrl(
-                                        widget.urlIndex,
-                                        titleController.text,
-                                        urlController.text,
-                                        descriptionController.text,
-                                        urlData.urls[widget.urlIndex!].category,
-                                        urlData.urls[widget.urlIndex!].color,
-                                        urlData.urls[widget.urlIndex!].favorite,
-                                      );
-                                      Navigator.pop(context);
-                                    }
-                                  },
-                                  child: const Text('Save',
-                                      style: TextStyle(
-                                          fontFamily: 'Nunito', fontSize: 20))),
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Theme.of(context).primaryColor)),
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate() ==
+                                      true) {
+                                    Provider.of<UrlProvider>(context,
+                                            listen: false)
+                                        .editUrl(
+                                      widget.urlIndex,
+                                      titleController.text,
+                                      urlController.text,
+                                      descriptionController.text,
+                                      urlData.urls[widget.urlIndex!].category,
+                                      urlData.urls[widget.urlIndex!].color,
+                                      urlData.urls[widget.urlIndex!].favorite,
+                                    );
+                                    Navigator.pop(context);
+                                  }
+                                },
+                                child: const Text(
+                                  'Save',
+                                  style: TextStyle(
+                                      fontFamily: 'Nunito', fontSize: 20),
+                                ),
+                              ),
                             )
                           ],
                         )
@@ -499,27 +512,27 @@ class _EditBookmarkState extends State<EditBookmark> {
                     top: 75,
                     right: 50,
                     child: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: Colors.white,
-                        ),
-                        child: IconButton(
-                            onPressed: () {
-                              if (urlData.urls[widget.urlIndex!].favorite ==
-                                  true) {
-                                urlData.changeFavoriteStatus(
-                                    false, widget.urlIndex!);
-                              } else {
-                                urlData.changeFavoriteStatus(
-                                    true, widget.urlIndex!);
-                              }
-                            },
-                            icon:
-                                urlData.urls[widget.urlIndex!].favorite == true
-                                    ? const Icon(Typicons.star_filled)
-                                    : const Icon(Typicons.star))),
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: Colors.white,
+                      ),
+                      child: IconButton(
+                          onPressed: () {
+                            if (urlData.urls[widget.urlIndex!].favorite ==
+                                true) {
+                              urlData.changeFavoriteStatus(
+                                  false, widget.urlIndex!);
+                            } else {
+                              urlData.changeFavoriteStatus(
+                                  true, widget.urlIndex!);
+                            }
+                          },
+                          icon: urlData.urls[widget.urlIndex!].favorite == true
+                              ? const Icon(Typicons.star_filled)
+                              : const Icon(Typicons.star)),
+                    ),
                   ),
                 ],
               ),

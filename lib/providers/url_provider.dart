@@ -15,15 +15,21 @@ class UrlProvider extends ChangeNotifier {
   final String _selectedValue = '';
   final String _selectedColor = '';
   final List<UrlModel> _sharedPrefList = [];
+  List<UrlModel> _urls = [];
+  List _categories = [
+    'Any',
+    'New ideas',
+    'Music',
+    'Cooking',
+    'Travel',
+    'News',
+    'Programming',
+  ];
 
   // getters
 
   List<UrlModel> get urls => sortUrls();
-  List<UrlModel> _urls = [];
-  List _categories = [];
-
-  List get categories => getCategories();
-
+  List get categories => _categories;
   bool get favoriteStatus => _favoriteStatus;
   String get selectedValue => _selectedValue;
   String get selectedColor => _selectedColor;
@@ -97,12 +103,21 @@ class UrlProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // update to shared preferences
+  // update shared preferences
 
   updatePref() async {
     _prefs = await SharedPreferences.getInstance();
     var json = jsonEncode(_urls.map((e) => e.toJson()).toList());
     _prefs.setString('urlList', json);
+    notifyListeners();
+  }
+
+  // update category shared preferences
+
+  updateCategoryPref() async {
+    _prefs = await SharedPreferences.getInstance();
+    var json = jsonEncode(_categories.map((e) => e).toList());
+    _prefs.setString('categoryList', json);
     notifyListeners();
   }
 
@@ -130,12 +145,38 @@ class UrlProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // get categories
-  getCategories() {
-    _categories = [];
-    for (var i = 0; i < sortItems.length; i++) {
-      _categories.add(sortItems[i]);
+  getCategoryItems() async {
+    List _sharedPrefCategoryList = [];
+    _prefs = await SharedPreferences.getInstance();
+    var jsonList = _prefs.getString('categoryList');
+    try {
+      if (jsonList == null) {
+        // print('null printed');
+        _isLoading = true;
+      } else {
+        _isLoading = false;
+        var convert = await json.decode(jsonList);
+        _sharedPrefCategoryList = convert;
+        // print(_sharedPrefList);
+      }
+    } catch (e) {
+      // print(e.toString());
     }
-    return _categories;
+    _categories.addAll(_sharedPrefCategoryList);
+    notifyListeners();
+  }
+
+  // add categories
+  addCategory(String item) {
+    _categories.add(item);
+    updateCategoryPref();
+    notifyListeners();
+  }
+
+  // delete categories
+  removeCategory(index) {
+    _categories.removeAt(index);
+    updateCategoryPref();
+    notifyListeners();
   }
 }

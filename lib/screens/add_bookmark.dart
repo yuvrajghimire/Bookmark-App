@@ -37,8 +37,8 @@ class _AddBookmarkState extends State<AddBookmark> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        body: Consumer<UrlProvider>(
-          builder: (context, urlData, child) => GestureDetector(
+        body: Consumer<UrlProvider>(builder: (context, urlData, child) {
+          return GestureDetector(
             onTap: () {
               FocusScope.of(context).unfocus();
             },
@@ -266,6 +266,22 @@ class _AddBookmarkState extends State<AddBookmark> {
                                       fontSize: 18,
                                       letterSpacing: 0.3,
                                       fontWeight: FontWeight.w600)),
+                              const SizedBox(width: 10),
+                              InkWell(
+                                onTap: () =>
+                                    Navigator.pushNamed(context, 'category'),
+                                child: Row(
+                                  children: const [
+                                    Icon(Icons.add, size: 20),
+                                    Text('Add',
+                                        style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontSize: 15,
+                                            letterSpacing: 0.3,
+                                            fontWeight: FontWeight.w500)),
+                                  ],
+                                ),
+                              )
                             ],
                           ),
                           const SizedBox(height: 10),
@@ -273,6 +289,7 @@ class _AddBookmarkState extends State<AddBookmark> {
                             child: ButtonTheme(
                               alignedDropdown: true,
                               child: DropdownButton(
+                                menuMaxHeight: 400,
                                 iconEnabledColor: Colors.white,
                                 dropdownColor:
                                     Theme.of(context).scaffoldBackgroundColor,
@@ -312,7 +329,7 @@ class _AddBookmarkState extends State<AddBookmark> {
                                     ),
                                   );
                                 }).toList(),
-                                onChanged: (dynamic? value) {
+                                onChanged: (dynamic value) {
                                   setState(() {
                                     _selectedValue = value!;
                                     // print(_selectedValue);
@@ -486,8 +503,8 @@ class _AddBookmarkState extends State<AddBookmark> {
                 ),
               ],
             ),
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
