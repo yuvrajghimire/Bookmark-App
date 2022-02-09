@@ -414,8 +414,8 @@ Widget _buildPopupDialog(BuildContext context, _categoryController, _formKey) {
                       if (_formKey.currentState!.validate() == true) {
                         Provider.of<UrlProvider>(context, listen: false)
                             .addCategory(_categoryController.text);
-                        print(Provider.of<UrlProvider>(context, listen: false)
-                            .categories);
+                        // print(Provider.of<UrlProvider>(context, listen: false)
+                        //     .categories);
                         Navigator.pop(context);
                       }
                     },

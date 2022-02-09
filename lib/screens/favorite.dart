@@ -219,7 +219,12 @@ class _FavoriteState extends State<Favorite> {
       child: InkWell(
         onTap: () {
           // print('tapped');
-          Navigator.pushNamed(context, 'edit', arguments: {'urlIndex': index});
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return buildPopupDialogDetail(context, urlData, index);
+            },
+          );
         },
         child: Row(
           children: [

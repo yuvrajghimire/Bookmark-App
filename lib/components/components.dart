@@ -1,5 +1,7 @@
 import 'package:bookmark/providers/url_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttericon/linearicons_free_icons.dart';
+import 'package:fluttericon/typicons_icons.dart';
 import 'package:provider/provider.dart';
 
 AlertDialog alertDialog(context, index) {
@@ -189,4 +191,158 @@ willPopScope(
   } else {
     return Navigator.pop(context);
   }
+}
+
+Widget buildPopupDialogDetail(BuildContext context, urlData, index) {
+  return Dialog(
+    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+    child: Container(
+      padding: const EdgeInsets.all(20),
+      height: 400,
+      width: MediaQuery.of(context).size.width * 0.8,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Icon(Icons.title, color: Theme.of(context).primaryColor),
+              const SizedBox(width: 8),
+              const Text('Title',
+                  style: TextStyle(
+                      fontFamily: 'Nunito',
+                      fontSize: 18,
+                      letterSpacing: 0.3,
+                      fontWeight: FontWeight.w700)),
+            ],
+          ),
+          Expanded(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                urlData.urls[index].title == ''
+                    ? '...'
+                    : urlData.urls[index].title,
+                style: const TextStyle(
+                    fontFamily: 'Nunito',
+                    fontSize: 16,
+                    letterSpacing: 0.3,
+                    fontWeight: FontWeight.w700),
+              ),
+            ),
+          ),
+          const Divider(color: Colors.black87, height: 20),
+          Row(
+            children: [
+              Icon(LineariconsFree.link_1,
+                  color: Theme.of(context).primaryColor),
+              const SizedBox(width: 8),
+              const Text('Url',
+                  style: TextStyle(
+                      fontFamily: 'Nunito',
+                      fontSize: 18,
+                      letterSpacing: 0.3,
+                      fontWeight: FontWeight.w700)),
+            ],
+          ),
+          Expanded(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: SelectableText(
+                urlData.urls[index].url == '' ? '...' : urlData.urls[index].url,
+                style: const TextStyle(
+                    fontFamily: 'Nunito',
+                    fontSize: 16,
+                    letterSpacing: 0.3,
+                    fontWeight: FontWeight.w700),
+              ),
+            ),
+          ),
+          const Divider(color: Colors.black87, height: 20),
+          Row(
+            children: [
+              Icon(Typicons.doc_text,
+                  size: 20, color: Theme.of(context).primaryColor),
+              const SizedBox(width: 8),
+              const Text('Description',
+                  style: TextStyle(
+                      fontFamily: 'Nunito',
+                      fontSize: 18,
+                      letterSpacing: 0.3,
+                      fontWeight: FontWeight.w700)),
+            ],
+          ),
+          Expanded(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                urlData.urls[index].description == ''
+                    ? '...'
+                    : urlData.urls[index].description,
+                style: const TextStyle(
+                    fontFamily: 'Nunito',
+                    fontSize: 16,
+                    letterSpacing: 0.3,
+                    fontWeight: FontWeight.w700),
+              ),
+            ),
+          ),
+          const Divider(color: Colors.black87, height: 20),
+          Row(
+            children: [
+              Icon(Icons.category_outlined,
+                  color: Theme.of(context).primaryColor),
+              const SizedBox(width: 8),
+              const Text('Category',
+                  style: TextStyle(
+                      fontFamily: 'Nunito',
+                      fontSize: 18,
+                      letterSpacing: 0.3,
+                      fontWeight: FontWeight.w700)),
+            ],
+          ),
+          Expanded(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                urlData.urls[index].category == ''
+                    ? '...'
+                    : urlData.urls[index].category,
+                style: const TextStyle(
+                    fontFamily: 'Nunito',
+                    fontSize: 16,
+                    letterSpacing: 0.3,
+                    fontWeight: FontWeight.w700),
+              ),
+            ),
+          ),
+          Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).primaryColor)),
+                  child: const Text('Edit'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'edit',
+                        arguments: {'urlIndex': index});
+                  },
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).primaryColor)),
+                  child: const Text('Close'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

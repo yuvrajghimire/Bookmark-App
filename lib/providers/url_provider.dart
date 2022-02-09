@@ -16,7 +16,8 @@ class UrlProvider extends ChangeNotifier {
   final String _selectedColor = '';
   final List<UrlModel> _sharedPrefList = [];
   List<UrlModel> _urls = [];
-  List _categories = [
+  // ignore: prefer_final_fields
+  List<String> _categories = [
     'Any',
     'New ideas',
     'Music',
@@ -146,23 +147,30 @@ class UrlProvider extends ChangeNotifier {
   }
 
   getCategoryItems() async {
-    List _sharedPrefCategoryList = [];
+    List<String> _sharedPrefCategoryList = [];
     _prefs = await SharedPreferences.getInstance();
     var jsonList = _prefs.getString('categoryList');
     try {
       if (jsonList == null) {
         // print('null printed');
-        _isLoading = true;
+        for (int i = 0; i < sortItems.length; i++) {
+          _sharedPrefCategoryList.add(sortItems[i]);
+        }
       } else {
-        _isLoading = false;
         var convert = await json.decode(jsonList);
-        _sharedPrefCategoryList = convert;
-        // print(_sharedPrefList);
+        // _categories.addAll(convert);
+        _sharedPrefCategoryList = [];
+        convert.forEach((category) {
+          _sharedPrefCategoryList.add(category);
+        });
       }
     } catch (e) {
       // print(e.toString());
+      // print('converts');
     }
-    _categories.addAll(_sharedPrefCategoryList);
+
+    _categories = _sharedPrefCategoryList;
+    // print(_categories);
     notifyListeners();
   }
 

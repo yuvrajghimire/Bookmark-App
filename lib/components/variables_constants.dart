@@ -5,7 +5,7 @@ import 'package:fluttericon/entypo_icons.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/linecons_icons.dart';
 
-const sortItems = [
+const List<String> sortItems = [
   'Any',
   'New ideas',
   'Music',
