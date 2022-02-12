@@ -240,9 +240,9 @@ class _FavoriteState extends State<Favorite> {
                         urlData.urls[index].title! == ''
                             ? '...'
                             : urlData.urls[index].title!.length > 50
-                                ? urlData.urls[index].title!.substring(0, 15) +
+                                ? '${urlData.urls[index].title![0].toUpperCase() + urlData.urls[index].title!.substring(1, 20)}'
                                     '...'
-                                : urlData.urls[index].title!,
+                                : '${urlData.urls[index].title![0].toUpperCase() + urlData.urls[index].title!.substring(1)}',
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 19,
@@ -254,7 +254,7 @@ class _FavoriteState extends State<Favorite> {
                       Opacity(
                         opacity: 0.7,
                         child: Text(
-                          '✦ ${urlData.urls[index].category!}',
+                          '✦ ${urlData.urls[index].category![0].toUpperCase() + urlData.urls[index].category!.substring(1)}',
                           style: const TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 15,

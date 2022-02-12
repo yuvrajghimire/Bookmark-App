@@ -218,9 +218,9 @@ Widget buildPopupDialogDetail(BuildContext context, urlData, index) {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                urlData.urls[index].title == ''
+                urlData.urls[index].title! == ''
                     ? '...'
-                    : urlData.urls[index].title,
+                    : '${urlData.urls[index].title![0].toUpperCase() + urlData.urls[index].title!.substring(1)}',
                 style: const TextStyle(
                     fontFamily: 'Nunito',
                     fontSize: 16,
@@ -276,7 +276,7 @@ Widget buildPopupDialogDetail(BuildContext context, urlData, index) {
               child: Text(
                 urlData.urls[index].description == ''
                     ? '...'
-                    : urlData.urls[index].description,
+                    : '${urlData.urls[index].description![0].toUpperCase() + urlData.urls[index].description!.substring(1)}',
                 style: const TextStyle(
                     fontFamily: 'Nunito',
                     fontSize: 16,
@@ -303,9 +303,7 @@ Widget buildPopupDialogDetail(BuildContext context, urlData, index) {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                urlData.urls[index].category == ''
-                    ? '...'
-                    : urlData.urls[index].category,
+                '${urlData.urls[index].category![0].toUpperCase() + urlData.urls[index].category!.substring(1)}',
                 style: const TextStyle(
                     fontFamily: 'Nunito',
                     fontSize: 16,
